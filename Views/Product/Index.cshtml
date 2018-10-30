@@ -352,12 +352,12 @@
 {
     <script language="javascript">
 	
-    //renderClient();
+    renderClient();
 
     function renderClient() {
     $.ajax({
         type: "GET",
-        url: "http://www.todo-api.com/api/values",
+        url: "/Product/GetList",
         async: false,
         dataType: "json",
         success: function (result) {

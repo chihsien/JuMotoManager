@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using JuMotoManager.DapperUnitOfWork;
+using JuMotoManager.Services;
 
 namespace JuMotoManager
 {
@@ -32,7 +36,10 @@ namespace JuMotoManager
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();   
+            services.AddScoped<ISupplierService, SupplierService>();                     
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,8 +55,17 @@ namespace JuMotoManager
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
+
             app.UseStaticFiles();
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "node_modules")),
+                RequestPath = "/node_modules"
+            });
+
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

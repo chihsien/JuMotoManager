@@ -17,7 +17,7 @@ namespace JuMotoManager.Repositories
         public IEnumerable<Supplier> All()
         {
             return Connection.Query<Supplier>(
-                "SELECT * FROM Supplier ORDER BY supplier_sno",
+                "SELECT * FROM supplier ORDER BY supplier_sno",
                 transaction: Transaction
             ).ToList();
         }
@@ -25,7 +25,7 @@ namespace JuMotoManager.Repositories
         public Supplier Find(int id)
         {
             return Connection.Query<Supplier>(
-                "SELECT * FROM Supplier WHERE supplier_sno = @sno",
+                "SELECT * FROM supplier WHERE supplier_sno = @sno",
                 param: new { sno = id },
                 transaction: Transaction
             ).FirstOrDefault();
@@ -35,7 +35,7 @@ namespace JuMotoManager.Repositories
         {       
             // "INSERT INTO Breed(Name) VALUES(@Name); SELECT SCOPE_IDENTITY()",         
             entity.supplier_sno  = Connection.ExecuteScalar<int>(
-                "INSERT INTO Supplier(supplier_name,phone,date_created) VALUES(@name,@phone,now())",
+                "INSERT INTO supplier(supplier_name,phone,date_created) VALUES(@name,@phone,now())",
                 param: new { name = entity.supplier_name,
                              phone = entity.phone         
                  },
@@ -46,7 +46,7 @@ namespace JuMotoManager.Repositories
         public void Update(Supplier entity)
         {
             Connection.Execute(
-                "UPDATE Supplier SET supplier_name = @name, phone=@phone WHERE supplier_sno = @sno",
+                "UPDATE supplier SET supplier_name = @name, phone=@phone WHERE supplier_sno = @sno",
                 param: new { sno = entity.supplier_sno,
                 name = entity.supplier_name, phone = entity.phone },
                 transaction: Transaction
@@ -56,7 +56,7 @@ namespace JuMotoManager.Repositories
         public void Delete(int id)
         {
             Connection.Execute(
-                "DELETE FROM Supplier WHERE supplier_sno = @sno",
+                "DELETE FROM supplier WHERE supplier_sno = @sno",
                 param: new { sno = id },
                 transaction: Transaction
             );
